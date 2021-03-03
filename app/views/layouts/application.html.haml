@@ -5,6 +5,9 @@
     =javascript_include_tag 'application', 'data-turbolinks-track' => true
     =csrf_meta_tags
   %body
+    %p.notice= notice
+    %p.alert= alert
+
     #flash-display
     - flash.each do |type, msg|
       %div
