@@ -5,6 +5,7 @@
     %tr
       %th Name
       %th Completed
+      %th List
       %th
       %th
       %th
@@ -14,6 +15,7 @@
       %tr
         %td=task.name
         %td=task.completed
+        %td=task.list.name
         %td=link_to 'Show', task
         %td=link_to 'Edit', edit_task_path(task)
         %td=link_to 'Destroy', task, :method => :delete, :data => { :confirm => 'Are you sure?' }

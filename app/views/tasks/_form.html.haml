@@ -9,12 +9,16 @@
   .field
     =f.label :name
     =f.text_field :name
+    =f.hidden_field :user_id, value: current_user.id
   .field
     =f.fields_for :list do |ff|
       %div
         =ff.label :list
         =ff.text_field :name
-        =ff.hidden_field :user_id, value: current_user.id
+  - if @task.persisted?
+    .field
+      =f.label :completed
+      =f.check_box :completed
   .actions
     =f.submit 'Save'
 

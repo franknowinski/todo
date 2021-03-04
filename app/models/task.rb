@@ -2,7 +2,8 @@
 
 class Task < ApplicationRecord
   validates :name, presence: true
-  belongs_to :list
+  belongs_to :user
+  belongs_to :list, required: false
 
   accepts_nested_attributes_for :list
 end

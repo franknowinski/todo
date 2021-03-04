@@ -7,7 +7,7 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.all
+    @tasks = current_user.tasks.where(completed: false)
   end
 
   # GET /tasks/1
@@ -73,6 +73,6 @@ class TasksController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def task_params
-    params.require(:task).permit(:name, list_attributes: [:name, :user_id])
+    params.require(:task).permit(:name, :user_id, list_attributes: [:name])
   end
 end
