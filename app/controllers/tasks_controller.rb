@@ -17,6 +17,7 @@ class TasksController < ApplicationController
   # GET /tasks/new
   def new
     @task = Task.new
+    @task.build_list
   end
 
   # GET /tasks/1/edit
@@ -72,6 +73,6 @@ class TasksController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def task_params
-    params.require(:task).permit(:name, :completed)
+    params.require(:task).permit(:name, list_attributes: [:name, :user_id])
   end
 end
