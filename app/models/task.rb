@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
-class Task < ActiveRecord::Base
+class Task < ApplicationRecord
   validates :name, presence: true
-  end
+  belongs_to :list
+end
