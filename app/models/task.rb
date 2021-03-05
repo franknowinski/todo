@@ -3,8 +3,9 @@
 class Task < ApplicationRecord
   validates :name, presence: true
   belongs_to :user
-  belongs_to :list, required: false
+  belongs_to :list, optional: true
 
+  # TODO: Fix bug adding lists to each update
   accepts_nested_attributes_for :list
 
   scope :completed_tasks, -> { where(completed: true) }
