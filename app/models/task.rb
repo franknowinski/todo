@@ -10,9 +10,12 @@ class Task < ApplicationRecord
   scope :completed_tasks, -> { where(completed: true) }
   scope :incompleted_tasks, -> { where(completed: false) }
 
+  has_paper_trail
+
   FILTER_TASKS_STATES = {
     "Incompleted Tasks" => :incompleted_tasks,
     "Completed Tasks" => :completed_tasks,
     "Both" => :tasks
   }
+
 end
