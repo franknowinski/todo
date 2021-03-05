@@ -7,7 +7,12 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = current_user.tasks.where(completed: false)
+    if filter_tasks_param.present?
+      method = Task::FILTER_TASKS_STATES.fetch(filter_tasks_param[:filter_tasks], :incompleted_tasks)
+      @tasks = current_user.send(method)
+    else
+      @tasks = current_user.incompleted_tasks
+    end
   end
 
   # GET /tasks/1
@@ -73,6 +78,10 @@ class TasksController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def task_params
-    params.require(:task).permit(:name, :user_id, list_attributes: [:name])
+    params.require(:task).permit(:name, :completed, :user_id, list_attributes: [:name])
+  end
+
+  def filter_tasks_param
+    params.permit(:filter_tasks)
   end
 end

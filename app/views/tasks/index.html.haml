@@ -1,5 +1,10 @@
 %h1 Tasks
 
+= form_tag root_path, method: :get, remote: true do
+  = label_tag "Filter by:"
+  = select_tag "filter_tasks", options_for_select(Task::FILTER_TASKS_STATES.keys)
+  = submit_tag 'Submit'
+
 %table
   %thead
     %tr
@@ -10,15 +15,8 @@
       %th
       %th
 
-  %tbody
-    - @tasks.each do |task|
-      %tr
-        %td=task.name
-        %td=task.completed
-        %td=task.list.name
-        %td=link_to 'Show', task
-        %td=link_to 'Edit', edit_task_path(task)
-        %td=link_to 'Destroy', task, :method => :delete, :data => { :confirm => 'Are you sure?' }
+  %tbody#tasks-table
+    = render 'table', task: @tasks
 
 %br
 
