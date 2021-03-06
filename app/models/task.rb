@@ -5,9 +5,6 @@ class Task < ApplicationRecord
   belongs_to :user
   belongs_to :list, optional: true
 
-  # TODO: Fix bug adding lists to each update
-  accepts_nested_attributes_for :list
-
   scope :completed_tasks, -> { where(completed: true) }
   scope :incompleted_tasks, -> { where(completed: false) }
 
@@ -18,5 +15,4 @@ class Task < ApplicationRecord
     "Completed Tasks" => :completed_tasks,
     "Both" => :tasks
   }
-
 end
