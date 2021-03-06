@@ -7,12 +7,7 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    if filter_tasks_param.present?
-      method = Task::FILTER_TASKS_STATES.fetch(filter_tasks_param[:filter_tasks], :incompleted_tasks)
-      @tasks = current_user.send(method)
-    else
-      @tasks = current_user.incompleted_tasks
-    end
+    @tasks = current_user.fetch_tasks(filter_tasks_by_params)
   end
 
   # GET /tasks/1
@@ -52,7 +47,7 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1.json
   def update
     respond_to do |format|
-      if create_or_update_list && @task.update(task_params)
+      if @task.create_or_update_list(list_params) && @task.update(task_params)
         format.html { redirect_to tasks_path, notice: 'Task was successfully updated.' }
         format.json { render :show, status: :ok, location: @task }
       else
@@ -92,15 +87,7 @@ class TasksController < ApplicationController
     list_params[:name].present?
   end
 
-  def filter_tasks_param
-    params.permit(:filter_tasks)
-  end
-
-  def create_or_update_list
-    if @task.list.present?
-      @task.list.update(list_params)
-    else
-      @task.create_list(list_params)
-    end
+  def filter_tasks_by_params
+    params.permit(:filter_tasks).fetch(:filter_tasks, nil)
   end
 end
