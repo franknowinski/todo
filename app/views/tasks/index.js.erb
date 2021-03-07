@@ -1,0 +1,9 @@
+var taskTable = document.getElementById('tasks-table')
+
+// Removes contents from tasks table within the DOM
+taskTable.innerHTML = "";
+
+// Displays the filtered tasks within the tasks table
+taskTable.insertAdjacentHTML("afterbegin",
+  "<%= escape_javascript render "table", task: @tasks %>"
+);

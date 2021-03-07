@@ -2,11 +2,12 @@
 
 class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy]
+  before_action :authenticate_user!
 
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.all
+    @tasks = current_user.fetch_tasks(filter_tasks_by_params)
   end
 
   # GET /tasks/1
@@ -16,15 +17,19 @@ class TasksController < ApplicationController
   # GET /tasks/new
   def new
     @task = Task.new
+    @list = List.new
   end
 
   # GET /tasks/1/edit
-  def edit; end
+  def edit
+    @list = @task.list.present? ? @task.list : List.new
+  end
 
   # POST /tasks
   # POST /tasks.json
   def create
     @task = Task.new(task_params)
+    @task.build_list(list_params) if has_list_name?
 
     respond_to do |format|
       if @task.save
@@ -42,7 +47,7 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1.json
   def update
     respond_to do |format|
-      if @task.update(task_params)
+      if @task.create_or_update_list(list_params) && @task.update(task_params)
         format.html { redirect_to tasks_path, notice: 'Task was successfully updated.' }
         format.json { render :show, status: :ok, location: @task }
       else
@@ -71,6 +76,18 @@ class TasksController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def task_params
-    params.require(:task).permit(:name, :completed)
+    params.require(:task).permit(:name, :completed, :user_id)
+  end
+
+  def list_params
+    params.require(:task).require(:list).permit(:name)
+  end
+
+  def has_list_name?
+    list_params[:name].present?
+  end
+
+  def filter_tasks_by_params
+    params.permit(:filter_tasks).fetch(:filter_tasks, nil)
   end
 end

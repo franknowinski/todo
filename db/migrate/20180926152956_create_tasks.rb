@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateTasks < ActiveRecord::Migration[5.2]
+class CreateTasks < ActiveRecord::Migration[6.0]
   def change
     create_table :tasks do |t|
       t.string :name

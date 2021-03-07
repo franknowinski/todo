@@ -1,12 +1,26 @@
-%p#notice=notice
+%p#notice= notice
 
 %p
   %b Name:
-  =@task.name
+  = @task.name
 %p
   %b Completed:
-  =@task.completed
+  = @task.completed
 
 =link_to 'Edit', edit_task_path(@task)
 \|
 =link_to 'Back', tasks_path
+
+%table
+  %thead
+    %tr
+      %th Event
+      %th Changed By
+      %th Updated at
+
+  %tbody#tasks-table
+    - @task.versions.each do |version|
+      %tr
+        %td= version.event
+        %td= user_email(version.whodunnit)
+        %td= version.created_at.strftime("%m/%d/%Y, %l:%M %p")
